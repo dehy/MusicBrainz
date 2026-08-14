@@ -6,7 +6,7 @@ namespace MusicBrainz;
  * Represents a MusicBrainz artist object
  * @package MusicBrainz
  */
-class Artist
+class Artist implements \Stringable
 {
     /**
      * @var string
@@ -61,27 +61,27 @@ class Artist
      */
     public function __construct(array $artist, MusicBrainz $brainz)
     {
-        if (!isset($artist['id']) || isset($artist['id']) && !$brainz->isValidMBID($artist['id'])) {
+        if (!isset($artist['id']) || !$brainz->isValidMBID($artist['id'])) {
             throw new Exception('Can not create artist object. Missing valid MBID');
         }
 
         $this->data   = $artist;
         $this->brainz = $brainz;
 
-        $this->id        = isset($artist['id']) ? (string)$artist['id'] : '';
+        $this->id        = (string)$artist['id'];
         $this->type      = isset($artist['type']) ? (string)$artist['type'] : '';
         $this->name      = isset($artist['name']) ? (string)$artist['name'] : '';
         $this->sortName  = isset($artist['sort-name']) ? (string)$artist['sort-name'] : '';
         $this->gender    = isset($artist['gender']) ? (string)$artist['gender'] : '';
         $this->country   = isset($artist['country']) ? (string)$artist['country'] : '';
-        $this->beginDate = isset($artist['life-span']['begin']) ? $artist['life-span']['begin'] : null;
-        $this->endDate   = isset($artist['life-span']['ended']) ? $artist['life-span']['ended'] : null;
+        $this->beginDate = $artist['life-span']['begin'] ?? null;
+        $this->endDate   = $artist['life-span']['ended'] ?? null;
     }
 
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getName();
     }
@@ -108,6 +108,46 @@ class Artist
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortName()
+    {
+        return $this->sortName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBeginDate()
+    {
+        return $this->beginDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
     }
 
     /**

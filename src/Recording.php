@@ -8,6 +8,8 @@ namespace MusicBrainz;
  */
 class Recording
 {
+    private int $length = 0;
+
     /**
      * @var string
      */
@@ -23,36 +25,29 @@ class Recording
     /**
      * @var Artist[]
      */
-    public $artists = array();
+    public $artists = [];
     /**
      * @var Release[]
      */
-    public $releases = array();
-    /**
-     * @var array
-     */
-    private $data;
+    public $releases = [];
 
     /**
-     * @param array       $recording
+     * @param array $data
      * @param MusicBrainz $brainz
      */
-    public function __construct(array $recording, MusicBrainz $brainz)
+    public function __construct(private array $data, private readonly MusicBrainz $brainz)
     {
-        $this->data   = $recording;
-        $this->brainz = $brainz;
+        $this->id       = (string)$this->data['id'];
+        $this->title    = (string)$this->data['title'];
+        $this->length   = (isset($this->data['length'])) ? (int)$this->data['length'] : 0;
+        $this->score    = (isset($this->data['score'])) ? (int)$this->data['score'] : 0;
 
-        $this->id       = (string)$recording['id'];
-        $this->title    = (string)$recording['title'];
-        $this->length   = (isset($recording['length'])) ? (int)$recording['length'] : 0;
-        $this->score    = (isset($recording['score'])) ? (int)$recording['score'] : 0;
-
-        if (isset($recording['artist-credit'])) {
-            $this->setArtists($recording['artist-credit']);
+        if (isset($this->data['artist-credit'])) {
+            $this->setArtists($this->data['artist-credit']);
         }
 
-        if (isset($recording['releases'])) {
-            $this->setReleases($recording['releases']);
+        if (isset($this->data['releases'])) {
+            $this->setReleases($this->data['releases']);
         }
     }
 
@@ -89,7 +84,7 @@ class Recording
             throw new Exception('Could not find any releases in the recording');
         }
 
-        $releaseDates = array();
+        $releaseDates = [];
 
         foreach ($this->releases as $release) {
             /** @var Release $release */
@@ -128,7 +123,7 @@ class Recording
      */
     public function getArtist()
     {
-        return ($this->getArtists()?$this->getArtists()[0]:null);
+        return ($this->getArtists() ? $this->getArtists()[0] : null);
     }
 
     /**
@@ -137,11 +132,11 @@ class Recording
     public function getArtists()
     {
         if (!$this->artists) {
-            $includes = array(
+            $includes = [
                 'artists',
-            );
+            ];
 
-            $release = $this->brainz->lookup('release', $this->getId(), $includes);
+            $release = $this->brainz->lookup('recording', $this->getId(), $includes);
             $this->setArtists($release['artist-credit']);
         }
         return $this->artists;
@@ -154,16 +149,10 @@ class Recording
      */
     public function getLength($format = 'int')
     {
-        switch ($format) {
-            case 'short':
-                return str_replace('.', ':', number_format(($this->length / 1000 / 60), 2));
-                break;
-            case 'long':
-                return str_replace('.', 'm ', number_format(($this->length / 1000 / 60), 2)) . 's';
-                break;
-            case 'int':
-            default:
-                return $this->length;
-        }
+        return match ($format) {
+            'short' => str_replace('.', ':', number_format(($this->length / 1000 / 60), 2)),
+            'long' => str_replace('.', 'm ', number_format(($this->length / 1000 / 60), 2)) . 's',
+            default => $this->length,
+        };
     }
 }

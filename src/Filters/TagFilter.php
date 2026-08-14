@@ -12,9 +12,9 @@ use MusicBrainz\Tag;
  */
 class TagFilter extends AbstractFilter implements FilterInterface
 {
-    protected $validArgTypes = array(
+    protected $validArgTypes = [
         'tag'
-    );
+    ];
 
     /**
      * @return string
@@ -32,9 +32,9 @@ class TagFilter extends AbstractFilter implements FilterInterface
      */
     public function parseResponse(array $response, MusicBrainz $brainz)
     {
-        $tags = array();
+        $tags = [];
         foreach ($response['tags'] as $tag) {
-            $tags[] = new Tag($tag, $brainz);
+            $tags[] = new Tag($tag);
         }
 
         return $tags;
