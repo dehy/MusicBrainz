@@ -4,41 +4,59 @@ This PHP library that allows you to easily access the MusicBrainz Web Service V2
 
 This project is a fork of https://github.com/mikealmond/MusicBrainz
 
-## Usage Example
+## Requirements
 
+- PHP 8.3 or later
+- A PSR-18 HTTP client and PSR-17 request and URI factories. Guzzle 7 supplies all three.
+
+## Installation
+
+```sh
+composer require dehy/musicbrainz
+```
+
+## Usage
 
 ```php
 <?php
-    use Guzzle\Http\Client;
-    use MusicBrainz\Filters\ArtistFilter;
-    use MusicBrainz\Filters\RecordingFilter;
-    use MusicBrainz\HttpAdapters\GuzzleHttpAdapter;
-    use MusicBrainz\MusicBrainz;
 
-    require __DIR__ . '/vendor/autoload.php';
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
+use MusicBrainz\Filters\RecordingFilter;
+use MusicBrainz\HttpAdapters\Psr18HttpAdapter;
+use MusicBrainz\MusicBrainz;
 
-    $brainz = new MusicBrainz(new GuzzleHttpAdapter(new Client()), 'username', 'password');
-    $brainz->setUserAgent('ApplicationName', '0.2', 'http://example.com');
+require __DIR__ . '/vendor/autoload.php';
 
-    $args = array(
-        "recording"  => "Buddy Holly",
-        "artist"     => 'Weezer',
-        "creditname" => 'Weezer',
-        "status"     => 'Official'
-    );
-    try {
-        $recordings = $brainz->search(new RecordingFilter($args));
-        print_r($recordings);
-    } catch (Exception $e) {
-        print $e->getMessage();
-    }
-?>
+$factory = new HttpFactory();
+$brainz = new MusicBrainz(new Psr18HttpAdapter(new Client(), $factory, $factory));
+$brainz->setUserAgent('ApplicationName', '0.2.0', 'https://example.com');
+
+$args = [
+    'recording' => 'Buddy Holly',
+    'artist' => 'Weezer',
+    'creditname' => 'Weezer',
+    'status' => 'Official',
+];
+
+try {
+    $recordings = $brainz->search(new RecordingFilter($args));
+    print_r($recordings);
+} catch (\Throwable $exception) {
+    print $exception->getMessage();
+}
 ```
 
-Look in the [/examples](https://github.com/dehy/MusicBrainz/tree/master/examples) folder for more.
+More runnable examples are available in the [examples](examples) directory. To try the browser demo locally, run `php -S 127.0.0.1:8080 -t demo` and open `http://127.0.0.1:8080`.
 
-## Requirements
-PHP 7.2 and [cURL extension](http://php.net/manual/en/book.curl.php).
+## Development
+
+```sh
+composer test
+composer stan
+composer lint
+composer rector
+```
 
 
 ## License
