@@ -47,4 +47,12 @@ class Label
         $this->country  = isset($this->data['country']) ? (string)$this->data['country'] : '';
         $this->aliases  = $this->data['aliases'] ?? [];
     }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

@@ -15,15 +15,15 @@ class GuzzleHttpAdapter extends AbstractHttpAdapter
      * Initializes the class.
      *
      * @param \GuzzleHttp\ClientInterface $client The Guzzle client used to make requests
-     * @param null                         $endpoint Override the default endpoint (useful for local development)
+    * @param string|null                   $endpoint Override the default endpoint (useful for local development)
      */
     public function __construct(/**
      * The Guzzle client used to make cURL requests
      */
         private readonly ClientInterface $client,
-        $endpoint = null
+        ?string $endpoint = null
     ) {
-        if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
+        if ($endpoint !== null && filter_var($endpoint, FILTER_VALIDATE_URL) !== false) {
             $this->endpoint = $endpoint;
         }
     }

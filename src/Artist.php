@@ -61,14 +61,14 @@ class Artist implements \Stringable
      */
     public function __construct(array $artist, MusicBrainz $brainz)
     {
-        if (!isset($artist['id']) || isset($artist['id']) && !$brainz->isValidMBID($artist['id'])) {
+        if (!isset($artist['id']) || !$brainz->isValidMBID($artist['id'])) {
             throw new Exception('Can not create artist object. Missing valid MBID');
         }
 
         $this->data   = $artist;
         $this->brainz = $brainz;
 
-        $this->id        = isset($artist['id']) ? (string)$artist['id'] : '';
+        $this->id        = (string)$artist['id'];
         $this->type      = isset($artist['type']) ? (string)$artist['type'] : '';
         $this->name      = isset($artist['name']) ? (string)$artist['name'] : '';
         $this->sortName  = isset($artist['sort-name']) ? (string)$artist['sort-name'] : '';
@@ -108,6 +108,46 @@ class Artist implements \Stringable
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortName()
+    {
+        return $this->sortName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBeginDate()
+    {
+        return $this->beginDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
     }
 
     /**

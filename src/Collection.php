@@ -14,10 +14,9 @@ class Collection
     public $id;
 
     /**
-     * @param array $data
-     * @param MusicBrainz $brainz
+        * @param array $data
      */
-    public function __construct(private array $data, private readonly MusicBrainz $brainz)
+    public function __construct(private array $data)
     {
         $this->id = isset($this->data['id']) ? (string)$this->data['id'] : '';
     }

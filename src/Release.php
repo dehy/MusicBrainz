@@ -52,9 +52,6 @@ class Release
      * @var ReleaseGroup
      */
     public $releaseGroup;
-    /**
-     * @var
-     */
     protected $releaseDate;
 
     /**
@@ -104,7 +101,8 @@ class Release
 
     /**
      * Get's the earliest release date
-     * @return \DateTime
+      *
+      * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -128,7 +126,7 @@ class Release
     /**
      * @param array $releaseEvents
      *
-     * @return array
+      * @return \DateTime
      */
     public function getReleaseEventDates(array $releaseEvents)
     {
