@@ -19,32 +19,21 @@ class ReleaseGroup
     /**
      * @var array
      */
-    public $secondaryTypes = array();
-    /**
-     * @var array
-     */
-    private $data;
-    /**
-     * @var MusicBrainz
-     */
-    private $brainz;
+    public $secondaryTypes = [];
     /**
      * @var Release[]
      */
-    private $releases = array();
+    private $releases = [];
 
     /**
-     * @param array       $releaseGroup
+     * @param array $data
      * @param MusicBrainz $brainz
      */
-    public function __construct(array $releaseGroup, MusicBrainz $brainz)
+    public function __construct(private array $data, private readonly MusicBrainz $brainz)
     {
-        $this->data   = $releaseGroup;
-        $this->brainz = $brainz;
-
-        $this->id             = isset($releaseGroup['id']) ? (string)$releaseGroup['id'] : '';
-        $this->primaryType    = isset($releaseGroup['primary-type']) ? (string)$releaseGroup['primary-type'] : '';
-        $this->secondaryTypes = isset($releaseGroup['secondary-types']) ? $releaseGroup['secondary-types'] : array();
+        $this->id             = isset($this->data['id']) ? (string)$this->data['id'] : '';
+        $this->primaryType    = isset($this->data['primary-type']) ? (string)$this->data['primary-type'] : '';
+        $this->secondaryTypes = $this->data['secondary-types'] ?? [];
     }
 
     /**

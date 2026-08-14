@@ -12,24 +12,13 @@ class Collection
      * @var string
      */
     public $id;
-    /**
-     * @var array
-     */
-    private $data;
-    /**
-     * @var MusicBrainz
-     */
-    private $brainz;
 
     /**
-     * @param array       $collection
+     * @param array $data
      * @param MusicBrainz $brainz
      */
-    public function __construct(array $collection, MusicBrainz $brainz)
+    public function __construct(private array $data, private readonly MusicBrainz $brainz)
     {
-        $this->data   = $collection;
-        $this->brainz = $brainz;
-
-        $this->id = isset($collection['id']) ? (string)$collection['id'] : '';
+        $this->id = isset($this->data['id']) ? (string)$this->data['id'] : '';
     }
 }

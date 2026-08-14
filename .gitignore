@@ -1,3 +1,7 @@
 /tests/MusicBrainz/Coverage/
 /vendor/
 composer.lock
+/.php-cs-fixer.cache
+/.phpstan.cache/
+/.phpunit.cache/
+/.phpunit.result.cache

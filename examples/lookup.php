@@ -1,13 +1,15 @@
 <pre><?php
 
 use GuzzleHttp\Client;
-use MusicBrainz\HttpAdapters\GuzzleHttpAdapter;
+use GuzzleHttp\Psr7\HttpFactory;
+use MusicBrainz\HttpAdapters\Psr18HttpAdapter;
 use MusicBrainz\MusicBrainz;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 // Create new MusicBrainz object
-$brainz = new MusicBrainz(new GuzzleHttpAdapter(new Client()));
+$factory = new HttpFactory();
+$brainz = new MusicBrainz(new Psr18HttpAdapter(new Client(), $factory, $factory));
 $brainz->setUserAgent('ApplicationName', '0.2', 'http://example.com');
 
 /**
@@ -15,12 +17,12 @@ $brainz->setUserAgent('ApplicationName', '0.2', 'http://example.com');
  * Note: You must be logged in to retrieve user-ratings
  * @see http://musicbrainz.org/doc/Artist
  */
-$includes = array(
+$includes = [
     'releases',
     'recordings',
     'release-groups',
     'user-ratings'
-);
+];
 try {
     $artist = $brainz->lookup('artist', '4dbf5678-7a31-406a-abbe-232f8ac2cd63', $includes);
     print_r($artist);

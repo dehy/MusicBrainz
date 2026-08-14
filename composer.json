@@ -19,21 +19,34 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "guzzlehttp/guzzle": "^7.1"
+        "php": "^8.3",
+        "guzzlehttp/guzzle": "^7.1",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.1",
+        "psr/http-message": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5"
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5",
+        "rector/rector": "^2.6"
     },
     "suggest": {
-        "guzzlehttp/guzzle": "Allows you to use the GuzzleHttpAdapter. You must install one of the supported adapters.",
-        "rmccue/requests": "Allows you to use the RequestsHttpAdapter. You must install one of the supported adapters."
+        "guzzlehttp/guzzle": "Allows you to use the GuzzleHttpAdapter. You must install one of the supported adapters."
     },
     "autoload": {
         "psr-4": {
             "MusicBrainz\\": "src/",
             "MusicBrainz\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "stan": "phpstan analyse",
+        "lint": "php-cs-fixer check --diff",
+        "fix": "php-cs-fixer fix",
+        "rector": "rector process --dry-run",
+        "rector:fix": "rector process"
     },
     "extra": {
         "branch-alias": {

@@ -47,7 +47,7 @@ class Release
     /**
      * @var Artist[]
      */
-    public $artists = array();
+    public $artists = [];
     /**
      * @var ReleaseGroup
      */
@@ -56,36 +56,29 @@ class Release
      * @var
      */
     protected $releaseDate;
-    /**
-     * @var array
-     */
-    private $data;
 
     /**
-     * @param array       $release
+     * @param array $data
      * @param MusicBrainz $brainz
      */
-    public function __construct(array $release, MusicBrainz $brainz)
+    public function __construct(private array $data, private readonly MusicBrainz $brainz)
     {
-        $this->data   = $release;
-        $this->brainz = $brainz;
+        $this->id       = isset($this->data['id']) ? (string)$this->data['id'] : '';
+        $this->title    = isset($this->data['title']) ? (string)$this->data['title'] : '';
+        $this->status   = isset($this->data['status']) ? (string)$this->data['status'] : '';
+        $this->quality  = isset($this->data['quality']) ? (string)$this->data['quality'] : '';
+        $this->language = isset($this->data['text-representation']['language']) ? (string)$this->data['text-representation']['language'] : '';
+        $this->script   = isset($this->data['text-representation']['script']) ? (string)$this->data['text-representation']['script'] : '';
+        $this->date     = isset($this->data['date']) ? (string)$this->data['date'] : '';
+        $this->country  = isset($this->data['country']) ? (string)$this->data['country'] : '';
+        $this->barcode  = isset($this->data['barcode']) ? (string)$this->data['barcode'] : '';
 
-        $this->id       = isset($release['id']) ? (string)$release['id'] : '';
-        $this->title    = isset($release['title']) ? (string)$release['title'] : '';
-        $this->status   = isset($release['status']) ? (string)$release['status'] : '';
-        $this->quality  = isset($release['quality']) ? (string)$release['quality'] : '';
-        $this->language = isset($release['text-representation']['language']) ? (string)$release['text-representation']['language'] : '';
-        $this->script   = isset($release['text-representation']['script']) ? (string)$release['text-representation']['script'] : '';
-        $this->date     = isset($release['date']) ? (string)$release['date'] : '';
-        $this->country  = isset($release['country']) ? (string)$release['country'] : '';
-        $this->barcode  = isset($release['barcode']) ? (string)$release['barcode'] : '';
-
-        if (isset($recording['artist-credit'])) {
-            $this->setArtists($recording['artist-credit']);
+        if (isset($this->data['artist-credit'])) {
+            $this->setArtists($this->data['artist-credit']);
         }
 
-        if (isset($release['release-group'])) {
-            $this->setReleaseGroup(new ReleaseGroup($release['release-group'], $this->brainz));
+        if (isset($this->data['release-group'])) {
+            $this->setReleaseGroup(new ReleaseGroup($this->data['release-group'], $this->brainz));
         }
     }
 
@@ -175,14 +168,14 @@ class Release
     public function getArtist()
     {
         if (!$this->artists) {
-            $includes = array(
+            $includes = [
                 'artists',
-            );
+            ];
 
             $release = $this->brainz->lookup('release', $this->getId(), $includes);
-            $this->setArtists(array($release['artist-credit']));
+            $this->setArtists([$release['artist-credit']]);
         }
-        return ($this->artists?$this->artists[0]:null);
+        return ($this->artists ? $this->artists[0] : null);
     }
 
     /**
@@ -191,9 +184,9 @@ class Release
     public function getArtists()
     {
         if (!$this->artists) {
-            $includes = array(
+            $includes = [
                 'artists',
-            );
+            ];
 
             $release = $this->brainz->lookup('release', $this->getId(), $includes);
             $this->setArtists($release['artist-credit']);

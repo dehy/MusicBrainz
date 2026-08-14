@@ -12,22 +12,17 @@ use MusicBrainz\Exception;
 class GuzzleHttpAdapter extends AbstractHttpAdapter
 {
     /**
-     * The Guzzle client used to make cURL requests
-     *
-     * @var \GuzzleHttp\ClientInterface
-     */
-    private $client;
-
-    /**
      * Initializes the class.
      *
      * @param \GuzzleHttp\ClientInterface $client The Guzzle client used to make requests
      * @param null                         $endpoint Override the default endpoint (useful for local development)
      */
-    public function __construct(ClientInterface $client, $endpoint = null)
-    {
-        $this->client = $client;
-
+    public function __construct(/**
+     * The Guzzle client used to make cURL requests
+     */
+        private readonly ClientInterface $client,
+        $endpoint = null
+    ) {
         if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
             $this->endpoint = $endpoint;
         }
@@ -45,7 +40,7 @@ class GuzzleHttpAdapter extends AbstractHttpAdapter
      * @throws \MusicBrainz\Exception
      * @return array
      */
-    public function call($path, array $params = array(), array $options = array(), $isAuthRequired = false, $returnArray = false)
+    public function call($path, array $params = [], array $options = [], $isAuthRequired = false, $returnArray = false)
     {
         if ($options['user-agent'] == '') {
             throw new Exception('You must set a valid User Agent before accessing the MusicBrainz API');

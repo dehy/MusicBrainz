@@ -15,7 +15,7 @@ class LabelFilter extends AbstractFilter implements FilterInterface
     /**
      * @var array
      */
-    protected $validArgTypes = array(
+    protected $validArgTypes = [
         'aliaas',
         'begin',
         'code',
@@ -30,7 +30,7 @@ class LabelFilter extends AbstractFilter implements FilterInterface
         'sortname',
         'tag',
         'type'
-    );
+    ];
 
     /**
      * @return string
@@ -48,10 +48,10 @@ class LabelFilter extends AbstractFilter implements FilterInterface
      */
     public function parseResponse(array $response, MusicBrainz $brainz)
     {
-        $labels = array();
+        $labels = [];
 
         foreach ($response['labels'] as $label) {
-            $labels[] = new Label($label, $brainz);
+            $labels[] = new Label($label);
         }
 
         return $labels;

@@ -7,6 +7,8 @@ namespace MusicBrainz;
  */
 class Label
 {
+    private readonly string $type;
+
     /**
      * @var string
      */
@@ -33,25 +35,16 @@ class Label
     public $country;
 
     /**
-     * @var array
+     * @param array $data
      */
-    private $data;
-
-    /**
-     * @param array       $label
-     * @param MusicBrainz $brainz
-     */
-    public function __construct(array $label, MusicBrainz $brainz)
+    public function __construct(private array $data)
     {
-        $this->data   = $label;
-        $this->brainz = $brainz;
-
-        $this->id       = isset($label['id']) ? (string)$label['id'] : '';
-        $this->type     = isset($label['type']) ? (string)$label['type'] : '';
-        $this->score    = isset($label['score']) ? (int)$label['score'] : 0;
-        $this->sortName = isset($label['sort-name']) ? (string)$label['sort-name'] : '';
-        $this->name     = isset($label['name']) ? (string)$label['name'] : '';
-        $this->country  = isset($label['country']) ? (string)$label['country'] : '';
-        $this->aliases  = isset($label['aliases']) ? $label['aliases'] : array();
+        $this->id       = isset($this->data['id']) ? (string)$this->data['id'] : '';
+        $this->type     = isset($this->data['type']) ? (string)$this->data['type'] : '';
+        $this->score    = isset($this->data['score']) ? (int)$this->data['score'] : 0;
+        $this->sortName = isset($this->data['sort-name']) ? (string)$this->data['sort-name'] : '';
+        $this->name     = isset($this->data['name']) ? (string)$this->data['name'] : '';
+        $this->country  = isset($this->data['country']) ? (string)$this->data['country'] : '';
+        $this->aliases  = $this->data['aliases'] ?? [];
     }
 }
