@@ -12,8 +12,10 @@ This project is a fork of https://github.com/mikealmond/MusicBrainz
 ## Installation
 
 ```sh
-composer require dehy/musicbrainz
+composer require dehy/musicbrainz guzzlehttp/guzzle
 ```
+
+Guzzle is used below as one PSR-18 and PSR-17 implementation. Another compatible option is `symfony/http-client`, whose `Symfony\Component\HttpClient\Psr18Client` provides both.
 
 ## Usage
 

@@ -2,10 +2,8 @@
 
 namespace MusicBrainz\Tests;
 
-use MusicBrainz\HttpAdapters\GuzzleHttpAdapter;
 use MusicBrainz\MusicBrainz;
 use MusicBrainz\Tests\Fixtures\RecordingHttpAdapter;
-use PHPUnit\Framework\MockObject\MockObject;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(MusicBrainz::class)]
 class MusicBrainzTest extends \PHPUnit\Framework\TestCase
@@ -17,9 +15,7 @@ class MusicBrainzTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        /** @var \GuzzleHttp\ClientInterface&MockObject $client */
-        $client = $this->createMock(\GuzzleHttp\ClientInterface::class);
-        $this->brainz = new MusicBrainz(new GuzzleHttpAdapter($client));
+        $this->brainz = new MusicBrainz(new RecordingHttpAdapter());
     }
 
     public function testLookupBuildsTheExpectedAdapterCall(): void
